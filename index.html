@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	<title>Corona with chart</title>
+</head>
+<body>
+	<canvas id="myChart" height="400" width="900"></canvas>
+	<script type="text/javascript">
+		const url = "https://api.covid19india.org/data.json";
+		fetch(url)
+			.then(res => { return res.json() })
+			.then(data => {
+				let time_series = data['cases_time_series'];
+				console.log(data);
+				
+				let time_labels = [];
+				
+				for(let i=0; i<time_series.length; i++) {
+					time_labels.push(time_series[i].date);
+				}
+				console.log(time_labels);
+
+				// let daily_confirmed = [];
+				// let daily_deceased = [];
+				// let daily_recovered = [];
+				let total_confirmed = [];
+				let total_deceased = [];
+				let total_recovered = [];
+				
+				for(let i=0; i<time_series.length; i++) {
+					// daily_confirmed.push(time_series[i].dailyconfirmed);
+					// daily_deceased.push(time_series[i].dailydeceased);
+					// daily_recovered.push(time_series[i].dailyrecovered);
+					total_confirmed.push(time_series[i].totalconfirmed);
+					total_deceased.push(time_series[i].totaldeceased);
+					total_recovered.push(time_series[i].totalrecovered);
+				}
+
+				//console.log(daily_data);
+
+				const ctx = document.getElementById('myChart');
+				const myChart = new Chart(ctx, {
+					type : 'line',
+					data : {
+						labels : [...time_labels],
+						datasets : [
+							// {
+							// 	data : daily_confirmed,
+							// 	label : 'Daily Confirmed',
+							// 	borderColor : '#ee6604',
+							// 	backgroundColor : '#ee6604',
+							// 	fill : false,
+							// 	borderWidth : 0.5
+							// },
+
+							// {
+							// 	data : daily_deceased,
+							// 	label : 'Daily Deceased',
+							// 	borderColor : '#ee0000',
+							// 	backgroundColor : '#ee0000',
+							// 	fill : false,
+							// 	borderWidth : 0.5
+							// },
+
+							// {
+							// 	data : daily_recovered,
+							// 	label : 'Daily recovered',
+							// 	borderColor : '#11ee11',
+							// 	backgroundColor : '#11ee11',
+							// 	fill : false,
+							// 	borderWidth : 0.5
+							// },
+
+							{
+								data : total_confirmed,
+								label : 'Total Confirmed',
+								borderColor : '#ee00aa',
+								backgroundColor : '#ee00aa',
+								fill : false,
+								borderWidth : 0.5
+							},
+
+							{
+								data : total_deceased,
+								label : 'Total Deceased',
+								borderColor : '#ee0000',
+								backgroundColor : '#ee0000',
+								fill : false,
+								borderWidth : 0.5
+							},
+
+							{
+								data : total_recovered,
+								label : 'Total recovered',
+								borderColor : '#11ee33',
+								backgroundColor : '#11ee33',
+								fill : false,
+								borderWidth : 0.5
+							}
+						] 
+					}
+				})
+
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	</script>
+</body>
+</html>
